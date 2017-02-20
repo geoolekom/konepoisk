@@ -134,14 +134,14 @@ def get_movie_chart(request, pk):
 	from matplotlib.figure import Figure
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(movie_id=pk))
-	fig = Figure()
+	fig = Figure(figsize=(5, 0.8+len(marks)*0.6))
 	ax = fig.add_subplot(1, 1, 1)
 	data = [mark.value for mark in marks]
 	labels = [mark.author.username for mark in marks]
 	locs = np.arange(1, len(data) + 1)
-	width = 0.8
-	ax.bar(locs, data, width=width, tick_label=labels)
-	ax.set_ylim([0, 10])
+	ax.barh(locs, data, height=0.8, tick_label=labels)
+	ax.set_xlim([0, 10.5])
+	fig.subplots_adjust(left=0.4)
 	canvas = FigureCanvas(fig)
 	response = HttpResponse(content_type='image/png')
 	canvas.print_png(response)

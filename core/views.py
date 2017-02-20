@@ -16,7 +16,7 @@ class RegisterView(CreateView):
 	template_name = 'core/register.html'
 	model = settings.AUTH_USER_MODEL
 	form_class = RegistrationForm
-	success_url = '/core/confirm'
+	#success_url = '/core/confirm'
 
 	def form_valid(self, form):
 		user = form.save()
@@ -30,7 +30,7 @@ class RegisterView(CreateView):
 			fail_silently=False
 		)
 		user.save()
-		return redirect(self.success_url)
+		return redirect(reverse('core:user', kwargs={'pk': user.id}))
 
 
 class ConfirmView(RedirectView):
@@ -38,7 +38,6 @@ class ConfirmView(RedirectView):
 
 	def dispatch(self, request, secret=None, *args, **kwargs):
 		try:
-			print(secret)
 			pk = signer.unsign(secret)
 			user = get_user_model().objects.get(pk=pk)
 			user.is_active = True
@@ -68,19 +67,19 @@ class LoginView(FormView):
 			return self.form_invalid(form)
 
 
-def get_user_chart(request):
+def get_user_chart(request, pk):
 	import numpy as np
 	from matplotlib.figure import Figure
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(author_id=request.user.id))
-	fig = Figure()
+	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(author_id=pk))
+	fig = Figure(figsize=(5, 0.8+len(marks)*0.6))
 	ax = fig.add_subplot(1, 1, 1)
 	data = [mark.value for mark in marks]
 	labels = [mark.movie.title for mark in marks]
 	locs = np.arange(1, len(data) + 1)
-	width = 0.8
-	ax.bar(locs, data, width=width, tick_label=labels)
-	ax.set_ylim([0, 10])
+	ax.barh(locs, data, height=0.8, tick_label=labels)
+	ax.set_xlim([0, 10.5])
+	fig.subplots_adjust(left=0.4)
 	canvas = FigureCanvas(fig)
 	response = HttpResponse(content_type='image/png')
 	canvas.print_png(response)
@@ -93,17 +92,7 @@ class MarksView(DetailView):
 	marks = None
 
 	def dispatch(self, request, pk=None, *args, **kwargs):
-		if request.user.is_authenticated:
-			self.marks = MovieMark.objects.filter(author_id=request.user.id).filter(movie__deleted=False)
-			return super(MarksView, self).dispatch(request, *args, **kwargs)
-		else:
-			raise Http404('Вы не авторизованы!')
-
-	def get_context_data(self, **kwargs):
-		context = super(MarksView, self).get_context_data(**kwargs)
-		return context
-
-
-
+		self.marks = MovieMark.objects.filter(Q(author_id=pk) & Q(movie__deleted=False))
+		return super(MarksView, self).dispatch(request, *args, **kwargs)
 
 

@@ -6,15 +6,21 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-sm-5">
-            <p><b>Имя пользователя:</b> {{user}}</p>
-            <p><b>email:</b> {{user.email}}</p>
+    {% if user.is_active %}
+
+        <div class="row">
+            <div class="col-sm-5">
+                <p><b>Имя пользователя:</b> {{user}}</p>
+                <p><b>email:</b> {{user.email}}</p>
+            </div>
+            <div class="col-sm-7">
+                <p> <b> Оценки: </b> </p>
+                <img src="{% url 'core:chart' user.id %}">
+            </div>
         </div>
-        <div class="col-sm-7">
-            <p> <b> Оценки: </b> </p>
-            <img src="{% url 'core:chart' %}">
-        </div>
-    </div>
+
+    {% else %}
+        <h2> Пользователь не активен. Возможно, вы не прошли по ссылке в email? </h2>
+    {% endif %}
 
 {% endblock %}
