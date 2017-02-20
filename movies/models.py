@@ -4,11 +4,17 @@ from django.core.urlresolvers import reverse_lazy
 
 
 class Genre(Titled):
-	pass
+	class Meta:
+		verbose_name = 'Жанр'
+		verbose_name_plural = 'Жанры'
 
 
 class Actor(Titled):
 	age = models.IntegerField(verbose_name='Возраст')
+
+	class Meta:
+		verbose_name = 'Актер'
+		verbose_name_plural = 'Актеры'
 
 
 class Movie(Dated, Deletable, Titled):
@@ -33,6 +39,10 @@ class Movie(Dated, Deletable, Titled):
 
 	def get_absolute_url(self):
 		return reverse_lazy('movies:detail', kwargs={'pk': self.id})
+
+	class Meta:
+		verbose_name = 'Фильм'
+		verbose_name_plural = 'Фильмы'
 
 
 class ActorMovie(models.Model):

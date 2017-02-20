@@ -9,13 +9,16 @@
     <script src="{% static 'core/js/movies.js' %}"></script>
 
     <div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-9">
 			{% if user.is_staff %}
 				<a href="{% url 'movies:movie_add' %}" class="btn btn-link">
 					<h5><span class="glyphicon glyphicon-plus"></span>   Добавить фильм</h5>
 				</a>
 			{% endif %}
 	    </div>
+        <div class="col-sm-3 sort-form">
+            {% bootstrap_form sort_form %}
+        </div>
     </div>
 
     {% if object_list %}

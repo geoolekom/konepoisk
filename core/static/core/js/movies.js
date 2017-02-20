@@ -16,6 +16,11 @@ $(document).ready(function() {
 
 	window.setInterval(updateRating, 1000);
 
+	$('.sort-form').find('select').change(function () {
+	    window.location.href = '/movies?sort=' + $(this).val();
+	});
+
+
 	$('.movie_mark').find('select').change(function () {
 		var url = $('.movie-rating').data('rate-url');
 		var mark_val = $(this).val();

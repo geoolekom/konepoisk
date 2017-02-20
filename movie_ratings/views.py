@@ -18,7 +18,7 @@ class EditComment(UpdateView):
 		if comment.author == self.request.user:
 			return comment
 		else:
-			raise Http404("Не твой коммент!")
+			raise Http404("Вы - не автор комментария!")
 
 	def get(self, request, *args, **kwargs):
 		self.form = CommentForm(instance=self.get_object())

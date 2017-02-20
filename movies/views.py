@@ -4,9 +4,9 @@ from movie_ratings.models import MovieMark, MovieComment
 from django.http import JsonResponse, HttpResponse, Http404
 from django.template.defaulttags import register
 from django.shortcuts import redirect, get_object_or_404
-from movies.forms import MovieForm, RateForm, CommentForm
+from movies.forms import MovieForm, RateForm, CommentForm, SortForm
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Avg
 
 
 @register.filter
@@ -22,9 +22,20 @@ def div3(value):
 class MovieListView(ListView):
 	template_name = 'movies/movies_list.html'
 	model = Movie
+	sort = '-pub_time'
+	
+	def dispatch(self, request, *args, **kwargs):
+		if 'sort' in request.GET:
+			self.sort = request.GET['sort']
+		return super(MovieListView, self).dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
-		return Movie.objects.filter(deleted=False)
+		return Movie.objects.annotate(rating=Avg('moviemark__value')).filter(deleted=False).order_by(self.sort)
+
+	def get_context_data(self, **kwargs):
+		context = super(MovieListView, self).get_context_data(**kwargs)
+		context['sort_form'] = SortForm({'sort': self.sort})
+		return context
 
 
 class RatingsView(View):
@@ -134,7 +145,7 @@ def get_movie_chart(request, pk):
 	from matplotlib.figure import Figure
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(movie_id=pk))
-	fig = Figure(figsize=(5, 0.8+len(marks)*0.6))
+	fig = Figure(figsize=(5.5, 1+len(marks)*0.4))
 	ax = fig.add_subplot(1, 1, 1)
 	data = [mark.value for mark in marks]
 	labels = [mark.author.username for mark in marks]

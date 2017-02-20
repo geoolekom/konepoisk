@@ -4,7 +4,14 @@ from movie_ratings.models import MovieComment, MovieMark
 
 
 class SortForm(forms.Form):
-	sort_by = forms.ChoiceField(choices=[("-pub_time", "Новые сверху"), ("-rating", "Лучшие сверху")], label='')
+	sort = forms.ChoiceField(
+		choices=[
+			("-pub_time", "Новые сверху"),
+			("-rating", "Лучшие сверху"),
+			("title", "По алфавиту"),
+		],
+		label=''
+	)
 
 
 class CommentForm(forms.ModelForm):

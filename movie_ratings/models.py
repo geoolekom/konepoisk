@@ -15,6 +15,10 @@ class MovieMark(Authored):
 		verbose_name='Оцененный фильм'
 	)
 
+	class Meta:
+		verbose_name = 'Оценка'
+		verbose_name_plural = 'Оценки'
+
 
 class MovieComment(Authored):
 	content = RedactorField(

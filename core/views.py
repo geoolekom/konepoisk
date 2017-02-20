@@ -72,7 +72,7 @@ def get_user_chart(request, pk):
 	from matplotlib.figure import Figure
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(author_id=pk))
-	fig = Figure(figsize=(5, 0.8+len(marks)*0.6))
+	fig = Figure(figsize=(5.5, 1 + len(marks) * 0.4))
 	ax = fig.add_subplot(1, 1, 1)
 	data = [mark.value for mark in marks]
 	labels = [mark.movie.title for mark in marks]
