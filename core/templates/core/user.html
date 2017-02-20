@@ -21,6 +21,11 @@
 {% else %}
 
   <li>
+        <a href="{% url 'core:register' %}" class="btn btn-link" name="register">
+            <span class="glyphicon glyphicon-user"/> Регистрация
+        </a>
+  </li>
+  <li>
 
     <form class="navbar-form pull-right form-inline" method="post">
         {% csrf_token %}
@@ -28,10 +33,7 @@
         {% bootstrap_field form.password show_label=False %}
 
         <button type="submit" formaction="{% url 'core:login' %}" class="btn btn-link" name="sign">
-            <span class="glyphicon glyphicon-log-in"/>
-        </button>
-        <button type="submit" formaction="{% url 'core:register' %}" class="btn btn-link" name="register">
-            <span class="glyphicon glyphicon-user"/>
+            <span class="glyphicon glyphicon-log-in"/> Вход
         </button>
 
     </form>

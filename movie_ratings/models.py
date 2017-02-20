@@ -19,6 +19,9 @@ class MovieMark(Authored):
 		verbose_name = 'Оценка'
 		verbose_name_plural = 'Оценки'
 
+	def __str__(self):
+		return "{0}, {1}: {2}".format(self.author, self.movie, self.value)
+
 
 class MovieComment(Authored):
 	content = RedactorField(
@@ -34,3 +37,6 @@ class MovieComment(Authored):
 	class Meta:
 		verbose_name = 'Рецензия'
 		verbose_name_plural = 'Рецензии'
+
+	def __str__(self):
+		return "{0}: {1}".format(self.author, self.content)

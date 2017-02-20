@@ -10,7 +10,6 @@
     <div class="col-sm-8">
         <form method="post" class="form" enctype="multipart/form-data"">
             {% csrf_token %}
-            {% bootstrap_form_errors form %}
             {% bootstrap_form form %}
             <input class="btn btn-primary btn-active" type="submit" value="Зарегистрироваться">
         </form>
