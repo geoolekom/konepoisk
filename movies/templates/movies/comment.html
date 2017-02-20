@@ -1,0 +1,31 @@
+<div class="comment panel panel-default" data-comment-id="{{comment.id}}">
+    <div class="panel-heading blocked comment-title">
+        <div class="row">
+            <div class="col-sm-10">
+                <strong> <b> {{ comment.author.username }} </b> </strong>
+            </div>
+            <div class="col-sm-2" align="right">
+                {% if user.is_authenticated and comment.author_id == user.id %}
+                <form method="post" class="form-inline">
+                    {% csrf_token %}
+                    <button
+                            type="button"
+                            class="edit-comment btn btn-xs btn-link"
+                            onclick="loadForm({{comment.id}})">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button
+                            type="button"
+                            class="delete-comment btn btn-xs btn-link"
+                            onclick="deleteComment({{comment.id}})">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="comment-content panel-body" data-comment-id="{{comment.id}}">
+        {{ comment.content | safe }}
+    </div>
+</div>

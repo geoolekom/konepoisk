@@ -1,0 +1,9 @@
+{% load bootstrap3 %}
+
+{% bootstrap_form_errors form %}
+{% bootstrap_field form.content show_label=False %}
+<input
+        class="save-comment btn btn-primary btn-active"
+        type="button"
+        value="Сохранить"
+        onclick="saveComment({{comment.id}})">

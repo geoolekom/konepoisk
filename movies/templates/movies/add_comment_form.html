@@ -1,0 +1,10 @@
+{% load bootstrap3 %}
+
+{% csrf_token %}
+{% bootstrap_form_errors add_form %}
+{% bootstrap_field add_form.content show_label=False %}
+
+<input class="add-comment btn btn-primary btn-active"
+       type="button"
+       value="Добавить комментарий"
+       onclick="addComment({{movie.id}})">

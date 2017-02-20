@@ -1,0 +1,30 @@
+<div class="row">
+	<div class="col-sm-1" align="center">
+		{% if user.is_staff %}
+		<p> </p>
+		<div class="dropdown">
+			<button class="btn btn-link btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
+				<span class="glyphicon glyphicon-chevron-down"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li>
+					<a class="delete-movie btn btn-link" href="{% url 'movies:movie_delete' movie.id %}">
+						<span class="glyphicon glyphicon-remove">  Удалить</span>
+					</a>
+				</li>
+				<li>
+					<a class="edit-movie btn btn-link" href="{% url 'movies:movie_edit' movie.id %}">
+						<span class="glyphicon glyphicon-pencil">  Редактировать</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		{% endif %}
+	</div>
+	<div class="col-sm-7">
+
+		<h2 style="margin:8"> {{ movie.title }} </h2>
+		<h6 class="text-muted" style="margin:0; margin-left:10"> {{movie.pub_time}} </h6>
+	</div>
+	{% include 'movies/movie_rating.html' %}
+</div>

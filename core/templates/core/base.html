@@ -1,0 +1,75 @@
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="geoolekom">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/jquery-ui.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'redactor/css/redactor.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/main.css' %}">
+
+    <script type="text/javascript" src="{% static 'core/js/jquery-3.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core/js/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'redactor/redactor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core/js/main.js' %}"></script>
+
+    <title> {% block title %} {% endblock %} </title>
+    <style>
+        .affix + .container {
+            padding-top: 71px;
+        }
+        .affix {
+           padding-top: 0px;
+        }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="delete-confirm" title="Удалить?"></div>
+
+    <nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="0">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'movies:movies_list' %}">
+            <span class="glyphicon glyphicon-fire"></span>
+            <strong>Конепоиск</strong>
+          </a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right login-form">Пользователь</ul>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+
+          {% if errors %} <div class="alert alert-danger fade in">
+              <strong> {{errors}} </strong>
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          </div>
+          {% endif %}
+
+          {% block content %}
+          {% endblock %}
+        </div>
+        <div class="col-sm-1"></div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p> &copy; Егор Комаров, 2017. По всем вопросам - geoolekom@gmail.com </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>

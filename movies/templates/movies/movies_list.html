@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block title %} Фильмы {% endblock %}
+
+{% block content %}
+
+    <script src="{% static 'core/js/movies.js' %}"></script>
+
+    <div class="row">
+		<div class="col-sm-12">
+			{% if user.is_staff %}
+				<a href="{% url 'movies:movie_add' %}" class="btn btn-link">
+					<h5><span class="glyphicon glyphicon-plus"></span>   Добавить фильм</h5>
+				</a>
+			{% endif %}
+	    </div>
+    </div>
+
+    {% if object_list %}
+        {% csrf_token %}
+
+        {% for movie in object_list %}
+
+            {% if forloop.counter|div3 == 1 %} <div class="row"> {% endif %}
+                <div class="col-sm-4">
+                    <div class="post panel panel-default" data-movie-id="" -id="{{movie.id}}">
+                        <div class="panel-heading blocked">
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <b> <a href="{% url 'movies:detail' movie.id %}"> {{ movie.title|title }} </a> </b>
+                                </div>
+                                <div class="col-sm-2 movie-rating" data-movie-id="{{movie.id}}">
+                                    <b> {{ movie.get_rating }} </b>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body"> <p>
+                            {% if movie.poster %}
+                                <img src="{{ movie.poster.url }}" border=2>
+                            {% endif %}
+                        </p> </div>
+                    </div>
+                </div>
+            {% if forloop.counter|div3 == 0 or forloop.last %} </div> {% endif %}
+
+        {% endfor %}
+
+    {% else %}
+
+    {% endif %}
+
+{% endblock %}

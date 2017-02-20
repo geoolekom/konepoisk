@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %} {{ user }} {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-5">
+            <p><b>Имя пользователя:</b> {{user}}</p>
+            <p><b>email:</b> {{user.email}}</p>
+        </div>
+        <div class="col-sm-7">
+            <p> <b> Оценки: </b> </p>
+            <img src="{% url 'core:chart' %}">
+        </div>
+    </div>
+
+{% endblock %}

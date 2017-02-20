@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %} Регистрация {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <form method="post" class="form" enctype="multipart/form-data"">
+            {% csrf_token %}
+            {% bootstrap_form_errors form %}
+            {% bootstrap_form form %}
+            <input class="btn btn-primary btn-active" type="submit" value="Зарегистрироваться">
+        </form>
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+
+{% endblock %}
