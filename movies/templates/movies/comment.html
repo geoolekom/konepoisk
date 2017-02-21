@@ -4,7 +4,7 @@
             <div class="panel-heading blocked comment-title">
                 <div class="row">
                     <div class="col-sm-7">
-                        <strong> <b> {{ comment.author.username }} </b> </strong>
+                        <strong> <b> <a href="{% url 'core:user' comment.author_id %}"> {{ comment.author.username }} </a> </b> </strong>
                     </div>
                     <div class="col-sm-5" align="right">
                         <em>
@@ -21,7 +21,7 @@
         <div class="panel-heading blocked comment-title">
             <div class="row">
                 <div class="col-sm-10">
-                    <strong> <b> {{ comment.author.username }} </b> </strong>
+                    <strong> <b> <a href="{% url 'core:user' comment.author_id %}"> {{ comment.author.username }} </a> </b> </strong>
                 </div>
                 <div class="col-sm-2" align="right">
                     {% if user.is_authenticated %}
