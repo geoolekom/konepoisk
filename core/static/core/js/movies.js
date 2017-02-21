@@ -65,7 +65,7 @@ function loadMovieChart () {
 		var users = Array();
 		var marks = Array();
 		for (i = 0; i < set.length; i++) {
-			users.push(set[i]['author']['username']);
+			users.push(set[i]['author']);
 			marks.push(set[i]['value'])
 		}
 		var myChart = Highcharts.chart('movie-chart', {
