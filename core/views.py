@@ -23,10 +23,10 @@ class RegisterView(CreateView):
 	def form_valid(self, form):
 		user = form.save()
 		user.is_active = False
-		user.secret = signer.sign(user.pk)
+		secret = signer.sign(user.username)
 		send_mail(
 			'Email confirmation',
-			'Click to confirm: http://' + settings.HOST + reverse('core:confirm', kwargs={'secret': user.secret}),
+			'Click to confirm: http://' + settings.HOST + reverse('core:confirm', kwargs={'secret': secret}),
 			'geoolekom@yandex.ru',
 			[user.email],
 			fail_silently=True
@@ -40,13 +40,15 @@ class ConfirmView(RedirectView):
 
 	def dispatch(self, request, secret=None, *args, **kwargs):
 		try:
-			pk = signer.unsign(secret)
-			user = get_user_model().objects.get(pk=pk)
+			username = signer.unsign(secret)
+			user = get_user_model().objects.get(username=username)
 			user.is_active = True
 			login(self.request, user)
 			user.save()
 		except BadSignature:
 			raise Http404("Wrong secret key!")
+		except get_user_model().DoesNotExist:
+			raise Http404("User does not exist.")
 		return redirect(reverse('movies:movies_list'))
 
 

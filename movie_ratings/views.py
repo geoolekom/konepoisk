@@ -57,22 +57,20 @@ class DeleteComment(DeleteView):
 	model = MovieComment
 	template_name = "movies/movie.html"
 	movie_id = None
-	author_id = None
 
 	def get_object(self, queryset=None):
 		if 'id' in self.request.POST:
 			comment = get_object_or_404(MovieComment, pk=self.request.POST['id'])
 			self.movie_id = comment.movie_id
-			self.author_id = comment.author_id
 			return comment
 		else:
 			raise Http404('Нет комментария с таким id.')
 
 	def delete(self, request, *args, **kwargs):
-		if request.user.id == self.author_id:
+		comment = self.get_object()
+		if request.user.id == comment.author_id:
 			return super(DeleteComment, self).delete(request, *args, **kwargs)
 		elif request.user.is_staff:
-			comment = self.get_object()
 			comment.deleted = True
 			comment.save()
 			return HttpResponse("hidden")
