@@ -23,7 +23,7 @@ class CommentForm(forms.ModelForm):
 class MovieForm(forms.ModelForm):
 	class Meta:
 		model = Movie
-		fields = ('title', 'genre', 'poster', 'description', )
+		fields = ('title', 'genre', 'year', 'budget', 'box_office', 'poster', 'description', )
 
 
 class RateForm(forms.ModelForm):

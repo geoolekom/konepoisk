@@ -25,6 +25,9 @@ class Movie(Dated, Deletable, Titled):
 	genre = models.ForeignKey(Genre, verbose_name='Жанр', null=True, blank=True)
 	poster = models.ImageField(verbose_name='Постер', null=True, blank=True, upload_to=poster_path)
 	description = models.TextField(verbose_name='Описание', null=True, blank=True)
+	year = models.IntegerField(verbose_name='Год выпуска', null=True, blank=True)
+	budget = models.IntegerField(verbose_name='Бюджет', null=True, blank=True)
+	box_office = models.IntegerField(verbose_name='Сборы', null=True, blank=True)
 
 	def get_rating(self):
 		rating = 0

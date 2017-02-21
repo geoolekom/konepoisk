@@ -54,6 +54,6 @@ function loadForm (id) {
 		var comment = $('.comment-content[data-comment-id=' + id + ']')
 		comment.html(data);
 		comment.children('.form-group').children('textarea').redactor();
-	})
+	});
 	//$('.comment-entry[data-comment-id=' + id + ']').load('comments/edit/' + id);
 }

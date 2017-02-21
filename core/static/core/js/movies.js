@@ -33,9 +33,38 @@ $(document).ready(function() {
 			function (new_rating) {
 				$(movieRating).html('<h2>' + new_rating + '</h2>');
 				image_src = $('.bar-chart').attr("src");
-				$('.bar-chart').attr("src", image_src+"?"+Math.floor(Math.random()*1000));
+				loadMovieChart();
 		});
 	});
+
+	function loadMovieChart () {
+        var movie_id = $('.movie').data('movie-id');
+        $.get('/movies/marks/?id=' + movie_id, function(data) {
+                var myChart = Highcharts.chart('movie-chart', {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Оценки фильма'
+                },
+                xAxis: {
+                    categories: data['users']
+                },
+                yAxis: {
+                    title: {
+                        text: 'Пользователи'
+                    }
+                },
+                series: [{
+                    name: 'Оценки',
+                    data: data['marks']
+                }],
+            });
+        });
+
+    };
+
+    loadMovieChart();
 
 });
 

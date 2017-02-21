@@ -6,16 +6,20 @@
 
 {% block content %}
 
+    <script type="text/javascript" src="{% static 'core/js/user.js' %}"></script>
+
     {% if user.is_active %}
 
-        <div class="row">
-            <div class="col-sm-5">
+        <div class="row user-info" data-user-id="{{user.id}}">
+            <div class="col-sm-4">
                 <p><b>Имя пользователя:</b> {{user}}</p>
                 <p><b>email:</b> {{user.email}}</p>
+                <p><b>Настоящее имя:</b> {{user.full_name}}</p>
+                <p><b></b></p>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-8">
                 <p> <b> Оценки: </b> </p>
-                <img src="{% url 'core:chart' user.id %}">
+                <div id="user-chart"></div>
             </div>
         </div>
 

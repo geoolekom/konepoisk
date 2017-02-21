@@ -10,7 +10,7 @@
 <script src="{% static 'core/js/comments.js' %}"></script>
 
 <div class="row">
-		<div class="post panel panel-default" data-post-id="{{post.id}}">
+		<div class="movie panel panel-default" data-movie-id="{{movie.id}}">
 			<div class="panel-heading blocked post-title">
 				{% include 'movies/movie_header.html' %}
 			</div>
@@ -18,14 +18,17 @@
 			<div class="panel-body row">
 				{% if movie.poster %}
 				<div class="col-sm-4">
-					<img src="{{ movie.poster.url }}" border=2>
+					<p> <img src="{{ movie.poster.url }}" border=2> </p>
+					<p> <b> Жанр: </b> {{ movie.genre }} </p>
+					<p> <b> Год: </b> {{ movie.year }} </p>
+					<p> <b> Бюджет: </b> {{ movie.budget }} </p>
+					<p> <b> Сборы: </b> {{ movie.box_office }} </p>
 				</div>
                 {% endif %}
 				<div class="col-sm-8">
-					<p> <b> Жанр: </b> {{ movie.genre }} </p>
 					<p> <b> Описание: </b></p>
 					<p> {{ movie.description | safe }} </p>
-					<div> <p> <img class="bar-chart" src="{% url 'movies:chart' movie.id %}"> </p> </div>
+					<div id="movie-chart"></div>
 				</div>
 			</div>
 		</div>

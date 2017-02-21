@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model, login
-from django.views.generic import CreateView, RedirectView, DetailView, FormView
+from django.views.generic import CreateView, RedirectView, DetailView, FormView, View
 from core.forms import RegistrationForm, LoginForm
 from movie_ratings.models import MovieMark
 from django.conf import settings
 from django.core.mail import send_mail
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect, reverse, get_object_or_404
 from django.core.signing import Signer, BadSignature
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.db.models import Q
 
 signer = Signer()
@@ -16,7 +16,6 @@ class RegisterView(CreateView):
 	template_name = 'core/register.html'
 	model = settings.AUTH_USER_MODEL
 	form_class = RegistrationForm
-	#success_url = '/core/confirm'
 
 	def form_valid(self, form):
 		user = form.save()
@@ -27,7 +26,7 @@ class RegisterView(CreateView):
 			'Click to confirm: http://' + settings.HOST + reverse('core:confirm', kwargs={'secret': user.secret}),
 			'geoolekom@yandex.ru',
 			[user.email],
-			fail_silently=False
+			fail_silently=True
 		)
 		user.save()
 		return redirect(reverse('core:user', kwargs={'pk': user.id}))
@@ -60,39 +59,32 @@ class LoginView(FormView):
 				login(self.request, user)
 				return super(LoginView, self).form_valid(form)
 			else:
-				form.add_error('password', 'Неправильнй пароль.')
+				form.add_error('password', 'Неправильный пароль.')
 				return self.form_invalid(form)
 		except get_user_model().DoesNotExist:
 			form.add_error('email', 'Нет пользователя с таким email!')
 			return self.form_invalid(form)
 
 
-def get_user_chart(request, pk):
-	import numpy as np
-	from matplotlib.figure import Figure
-	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(author_id=pk))
-	fig = Figure(figsize=(5.5, 1 + len(marks) * 0.4))
-	ax = fig.add_subplot(1, 1, 1)
-	data = [mark.value for mark in marks]
-	labels = [mark.movie.title for mark in marks]
-	locs = np.arange(1, len(data) + 1)
-	ax.barh(locs, data, height=0.8, tick_label=labels)
-	ax.set_xlim([0, 10.5])
-	fig.subplots_adjust(left=0.4)
-	canvas = FigureCanvas(fig)
-	response = HttpResponse(content_type='image/png')
-	canvas.print_png(response)
-	return response
-
-
-class MarksView(DetailView):
+class UserInfoView(DetailView):
 	model = get_user_model()
 	template_name = 'core/user_info.html'
 	marks = None
 
 	def dispatch(self, request, pk=None, *args, **kwargs):
 		self.marks = MovieMark.objects.filter(Q(author_id=pk) & Q(movie__deleted=False))
-		return super(MarksView, self).dispatch(request, *args, **kwargs)
+		return super(UserInfoView, self).dispatch(request, *args, **kwargs)
+
+
+class UserMarksView(View):
+
+	def get(self, request):
+		user_id = request.GET.get('id', '')
+		if id != '':
+			markset = MovieMark.objects.filter(author_id=user_id)
+			data = dict()
+			data['movies'] = [mark.movie.title for mark in markset]
+			data['marks'] = [mark.value for mark in markset]
+		return JsonResponse(data)
 
 

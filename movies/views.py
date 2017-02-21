@@ -50,6 +50,18 @@ class RatingsView(View):
 		return JsonResponse(movies)
 
 
+class MovieMarksView(View):
+
+	def get(self, request):
+		movie_id = request.GET.get('id', '')
+		if id != '':
+			markset = get_object_or_404(Movie, pk=movie_id).moviemark_set.all()
+			data = dict()
+			data['users'] = [mark.author.username for mark in markset]
+			data['marks'] = [mark.value for mark in markset]
+		return JsonResponse(data)
+
+
 class MovieDetailView(DetailView):
 
 	template_name = 'movies/movie.html'
@@ -139,21 +151,3 @@ class RateMovie(UpdateView):
 			except:
 				raise Http404
 
-
-def get_movie_chart(request, pk):
-	import numpy as np
-	from matplotlib.figure import Figure
-	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-	marks = MovieMark.objects.filter(Q(movie__deleted=False) & Q(movie_id=pk))
-	fig = Figure(figsize=(5.5, 1+len(marks)*0.4))
-	ax = fig.add_subplot(1, 1, 1)
-	data = [mark.value for mark in marks]
-	labels = [mark.author.username for mark in marks]
-	locs = np.arange(1, len(data) + 1)
-	ax.barh(locs, data, height=0.8, tick_label=labels)
-	ax.set_xlim([0, 10.5])
-	fig.subplots_adjust(left=0.4)
-	canvas = FigureCanvas(fig)
-	response = HttpResponse(content_type='image/png')
-	canvas.print_png(response)
-	return response
