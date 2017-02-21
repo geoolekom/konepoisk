@@ -66,6 +66,7 @@ class MovieDetailView(DetailView):
 		context['movie'] = self.object
 		context['comments'] = self.object.moviecomment_set.all()
 		context['add_form'] = CommentForm({'author': self.request.user})
+		context['editing_title'] = self.object.title
 
 		try:
 			mark = self.object.moviemark_set.get(author_id=self.request.user.id)
@@ -81,6 +82,11 @@ class AddMovie(CreateView):
 	template_name = 'movies/movie_form.html'
 	model = Movie
 	fields = ('title', 'genre', 'poster', 'description', )
+
+	def get_context_data(self, **kwargs):
+		context = super(AddMovie, self).get_context_data(**kwargs)
+		context['editing_title'] = 'Новый фильм'
+		return context
 
 
 class DeleteMovie(RedirectView):

@@ -3,8 +3,8 @@ $(document).ready(function() {
 	$('.login-form').load('/core/login');
 
 	$('textarea').redactor({
-		imageUpload: '/media/redactor/',
-		fileUpload: '/media/redactor/',
+		imageUpload: '/core/upload/',
+		fileUpload: '/core/upload/',
 		callbacks: {
 			imageUpload: function (image, json) {
 				$(image).attr('width', "50%");

@@ -1,13 +1,16 @@
 from django.contrib.auth import get_user_model, login
-from django.views.generic import CreateView, RedirectView, DetailView, FormView
+from django.views.generic import CreateView, RedirectView, DetailView, FormView, View
 from core.forms import RegistrationForm, LoginForm
 from movie_ratings.models import MovieMark
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import redirect, reverse, get_object_or_404
 from django.core.signing import Signer, BadSignature
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.db.models import Q
+
+import shutil
+import json
 
 signer = Signer()
 
@@ -75,3 +78,21 @@ class UserInfoView(DetailView):
 		self.marks = MovieMark.objects.filter(Q(author_id=pk) & Q(movie__deleted=False))
 		return super(UserInfoView, self).dispatch(request, *args, **kwargs)
 
+
+class UploadView(View):
+
+	def get(self, request):
+		return HttpResponse("OK")
+
+	def post(self, request):
+		file = request.FILES['file']
+		server_name = settings.MEDIA_ROOT + "comments/" + str(request.user) + "_" + file.name
+		simple_server_name = settings.MEDIA_URL + "comments/" + str(request.user) + "_" + file.name
+
+		destination = open(server_name, "wb+")
+		shutil.copyfileobj(file, destination)
+		response = {
+			'filelink': simple_server_name,
+			'filename': file.name,
+		}
+		return HttpResponse(json.dumps(response), content_type='application/json')
