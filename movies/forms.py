@@ -9,6 +9,7 @@ class SortForm(forms.Form):
 			("-pub_time", "Новые сверху"),
 			("-rating", "Лучшие сверху"),
 			("title", "По алфавиту"),
+			("-pop", "По популярности"),
 		],
 		label=''
 	)

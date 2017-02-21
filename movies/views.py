@@ -6,7 +6,7 @@ from django.template.defaulttags import register
 from django.shortcuts import redirect, get_object_or_404
 from movies.forms import MovieForm, RateForm, CommentForm, SortForm
 from django.core.urlresolvers import reverse
-from django.db.models import Q, Avg, F
+from django.db.models import Q, Avg, F, Count
 
 
 @register.filter
@@ -22,7 +22,7 @@ def div3(value):
 class MovieListView(ListView):
 	template_name = 'movies/movies_list.html'
 	model = Movie
-	sort = '-pub_time'
+	sort = '-rating'
 	
 	def dispatch(self, request, *args, **kwargs):
 		if 'sort' in request.GET:
@@ -30,7 +30,8 @@ class MovieListView(ListView):
 		return super(MovieListView, self).dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
-		return Movie.objects.annotate(rating=Avg('moviemark__value'))\
+		return Movie.objects\
+			.annotate(rating=Avg('moviemark__value')).annotate(pop=Count('moviemark'))\
 			.filter(deleted=False)\
 			.order_by(self.sort)
 

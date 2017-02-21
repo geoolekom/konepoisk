@@ -1,7 +1,14 @@
 $(document).ready(function() {
     function loadUserChart () {
         var user_id = $('.user-info').data('user-id');
-        $.get('/core/marks/?id=' + user_id, function(data) {
+        $.get('/api/users/' + user_id + '.json', function(data) {
+        		var set = data['moviemark_set'];
+        		var movies = Array();
+        		var marks = Array();
+        		for (i = 0; i < set.length; i++) {
+        			movies.push(set[i]['movie']['title']);
+        			marks.push(set[i]['value'])
+                }
                 var myChart = Highcharts.chart('user-chart', {
                 chart: {
                     type: 'bar'
@@ -10,7 +17,7 @@ $(document).ready(function() {
                     text: 'Статистика оценок'
                 },
                 xAxis: {
-                    categories: data['movies']
+                    categories: movies
                 },
                 yAxis: {
                     title: {
@@ -20,7 +27,7 @@ $(document).ready(function() {
                 },
                 series: [{
                     name: 'Оценка',
-                    data: data['marks']
+                    data: marks
                 }],
                 legend: [{
                     enabled: false,

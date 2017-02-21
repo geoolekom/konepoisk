@@ -40,7 +40,15 @@ $(document).ready(function() {
 
 	function loadMovieChart () {
         var movie_id = $('.movie').data('movie-id');
-        $.get('/movies/marks/?id=' + movie_id, function(data) {
+        $.get('/api/movies/' + movie_id + '.json', function(data) {
+        		var set = data['moviemark_set'];
+        		var users = Array();
+        		var marks = Array();
+        		for (i = 0; i < set.length; i++) {
+        			users.push(set[i]['author']['username']);
+        			marks.push(set[i]['value'])
+                }
+
                 var myChart = Highcharts.chart('movie-chart', {
                 chart: {
                     type: 'bar'
@@ -49,7 +57,7 @@ $(document).ready(function() {
                     text: 'Статистика оценок'
                 },
                 xAxis: {
-                    categories: data['users']
+                    categories: users
                 },
                 yAxis: {
                     title: {
@@ -59,7 +67,7 @@ $(document).ready(function() {
                 },
                 series: [{
                     name: 'Оценка',
-                    data: data['marks']
+                    data: marks
                 }],
                 legend: [{
                     enabled: false,

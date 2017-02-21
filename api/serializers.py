@@ -7,15 +7,15 @@ from rest_framework.serializers import ModelSerializer, HyperlinkedRelatedField,
 class MovieSerializer(ModelSerializer):
 	class Meta:
 		model = Movie
-		depth = 1
+		depth = 2
 		fields = ('id', 'title', 'genre', 'year', 'budget', 'box_office', 'description', 'poster', 'moviemark_set')
 
 
 class UserSerializer(ModelSerializer):
 	class Meta:
 		model = get_user_model()
-		depth = 1
-		fields = ('id', 'username', 'email', 'first_name', 'last_name', 'moviecomment_set')
+		depth = 2
+		fields = ('id', 'username', 'email', 'first_name', 'last_name', 'moviecomment_set', 'moviemark_set')
 
 
 class CommentSerializer(ModelSerializer):
