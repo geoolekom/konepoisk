@@ -45,19 +45,23 @@ $(document).ready(function() {
                     type: 'bar'
                 },
                 title: {
-                    text: 'Оценки фильма'
+                    text: 'Статистика оценок'
                 },
                 xAxis: {
                     categories: data['users']
                 },
                 yAxis: {
                     title: {
-                        text: 'Пользователи'
-                    }
+                        text: null,
+                    },
+                    max: 10
                 },
                 series: [{
                     name: 'Оценки',
                     data: data['marks']
+                }],
+                legend: [{
+                    enabled: false,
                 }],
             });
         });
