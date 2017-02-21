@@ -2,7 +2,7 @@ from django.shortcuts import render
 from movies.forms import CommentForm
 from movies.models import Movie
 from movie_ratings.models import MovieComment
-from django.views.generic import UpdateView, CreateView, DeleteView, DetailView
+from django.views.generic import UpdateView, CreateView, DeleteView, DetailView, View
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, reverse
 
@@ -56,21 +56,43 @@ class AddComment(CreateView):
 class DeleteComment(DeleteView):
 	model = MovieComment
 	template_name = "movies/movie.html"
+	movie_id = None
+	author_id = None
 
 	def get_object(self, queryset=None):
 		if 'id' in self.request.POST:
-			comment = get_object_or_404(MovieComment, pk=self.request.POST['id'], author_id=self.request.user.id)
-			self.movie_id = comment.movie.id
+			comment = get_object_or_404(MovieComment, pk=self.request.POST['id'])
+			self.movie_id = comment.movie_id
+			self.author_id = comment.author_id
 			return comment
 		else:
-			raise Http404
+			raise Http404('Нет комментария с таким id.')
 
 	def delete(self, request, *args, **kwargs):
-		super(DeleteComment, self).delete(request, *args, **kwargs)
-		return HttpResponse("OK")
+		if request.user.id == self.author_id:
+			return super(DeleteComment, self).delete(request, *args, **kwargs)
+		elif request.user.is_staff:
+			comment = self.get_object()
+			comment.deleted = True
+			comment.save()
+			return HttpResponse("hidden")
+		else:
+			raise Http404('Нет права удалять этот комментарий.')
 
 	def get_success_url(self):
 		return reverse('movies:detail', kwargs={'pk': self.movie_id})
+
+
+class RestoreComment(View):
+
+	def post(self, request, *args, **kwargs):
+		if request.user.is_staff and 'id' in request.POST:
+			comment = get_object_or_404(MovieComment, pk=self.request.POST['id'])
+			comment.deleted = False
+			comment.save()
+			return HttpResponse("OK")
+		else:
+			raise Http404('Невозможно восстановить комментарий.')
 
 
 class CommentDetailView(DetailView):

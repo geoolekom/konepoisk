@@ -7,7 +7,8 @@ from rest_framework.serializers import ModelSerializer, HyperlinkedRelatedField,
 class MovieSerializer(ModelSerializer):
 	class Meta:
 		model = Movie
-		fields = ('id', 'title', 'genre', 'year', 'budget', 'box_office', 'description', 'poster', )
+		depth = 1
+		fields = ('id', 'title', 'genre', 'year', 'budget', 'box_office', 'description', 'poster', 'moviemark_set')
 
 
 class UserSerializer(ModelSerializer):

@@ -8,13 +8,18 @@ from api.permissions import IsAuthorOrReadOnly
 
 
 class MovieList(ListCreateAPIView):
-	queryset = Movie.objects.all()
 	serializer_class = MovieSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
+	def get_queryset(self):
+		if 'sort' in self.request.GET:
+			return Movie.objects.filter(deleted=False).order_by(self.request.GET['sort'])
+		else:
+			return Movie.objects.filter(deleted=False)
+
 
 class MovieDetail(RetrieveUpdateDestroyAPIView):
-	queryset = Movie.objects.all()
+	queryset = Movie.objects.filter(deleted=False)
 	serializer_class = MovieSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 

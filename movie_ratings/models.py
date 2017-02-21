@@ -1,6 +1,6 @@
 from django.db import models
 from movies.models import Movie
-from properties.models import Authored
+from properties.models import Authored, Deletable
 from redactor.fields import RedactorField
 
 
@@ -23,7 +23,7 @@ class MovieMark(Authored):
 		return "{0}, {1}: {2}".format(self.author, self.movie, self.value)
 
 
-class MovieComment(Authored):
+class MovieComment(Authored, Deletable):
 	content = RedactorField(
 		verbose_name=u'Содержание',
 		redactor_options={'lang': 'ru', 'focus': True},

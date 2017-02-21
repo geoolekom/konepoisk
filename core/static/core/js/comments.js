@@ -20,7 +20,7 @@ function addComment (movie_id) {
 		function (data) {
 			$.get('comments/' + data, function (response) {
 				$('.comments').append(response);
-				$(".redactor-editor").addClass("redactor-placeholder")
+				$(".redactor-editor").addClass("redactor-placeholder");
 				$(".redactor-editor").html("<p>​</p>");
 			});
 	});
@@ -38,7 +38,11 @@ function deleteComment (id) {
 					'comments/delete', 
 					{id: id, csrfmiddlewaretoken: csrf}, 
 					function (data) {
-						comment.remove();
+						if (data == 'hidden') {
+                            comment.load('/movies/comments/' + id);
+                        } else {
+							comment.remove();
+						}
 				});
 				dialog.dialog("close");
 			},
@@ -49,6 +53,17 @@ function deleteComment (id) {
 	})
 }
 
+function restoreComment (id) {
+	var csrf = $("input[name='csrfmiddlewaretoken']").val();
+	var comment = $('.comment[data-comment-id=' + id + ']');
+	$.post(
+		'comments/restore',
+		{id: id, csrfmiddlewaretoken: csrf},
+			function (data) {
+				comment.load('/movies/comments/' + id);
+		});
+}
+
 function loadForm (id) {
 	$.get('comments/edit/' + id, function (data) {
 		var comment = $('.comment-content[data-comment-id=' + id + ']')
@@ -57,3 +72,4 @@ function loadForm (id) {
 	});
 	//$('.comment-entry[data-comment-id=' + id + ']').load('comments/edit/' + id);
 }
+

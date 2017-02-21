@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from movies.views import MovieListView, RatingsView, MovieDetailView, EditMovie, AddMovie, DeleteMovie, RateMovie, MovieMarksView
-from movie_ratings.views import CommentDetailView, EditComment, AddComment, DeleteComment
+from movie_ratings.views import CommentDetailView, EditComment, AddComment, DeleteComment, RestoreComment
 from django.contrib.auth.decorators import permission_required
 
 
@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'comments/edit/(?P<pk>\d+)', EditComment.as_view(), name="comment-edit"),
     url(r'comments/add', AddComment.as_view(), name="comment-add"),
     url(r'comments/delete', DeleteComment.as_view(), name="comment-delete"),
+    url(r'comments/restore', RestoreComment.as_view(), name="comment-restore"),
     url(r'comments/(?P<pk>\d+)', CommentDetailView.as_view(), name="comment-detail"),
     url(r'edit/(?P<pk>\d+)', EditMovie.as_view(), name="movie_edit"),
     url(r'delete/(?P<pk>\d+)', permission_required('movie.delete')(DeleteMovie.as_view()), name="movie_delete"),
