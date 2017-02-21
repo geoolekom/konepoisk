@@ -42,47 +42,6 @@ $(document).ready(function() {
 		});
 	});
 
-	function loadMovieChart () {
-        var movie_id = $('.movie').data('movie-id');
-        $.get('/api/movies/' + movie_id + '.json', function(data) {
-        		var set = data['moviemark_set'];
-        		var users = Array();
-        		var marks = Array();
-        		for (i = 0; i < set.length; i++) {
-        			users.push(set[i]['author']['username']);
-        			marks.push(set[i]['value'])
-                }
-
-                var myChart = Highcharts.chart('movie-chart', {
-                chart: {
-                    type: 'bar'
-                },
-                title: {
-                    text: 'Статистика оценок'
-                },
-                xAxis: {
-                    categories: users
-                },
-                yAxis: {
-                    title: {
-                        text: null
-                    },
-                    max: 10
-                },
-                series: [{
-                    name: 'Оценка',
-                    data: marks
-                }],
-                legend: [{
-                    enabled: false
-                }]
-            });
-        });
-
-    };
-
-    loadMovieChart();
-
 });
 
 function deletemovie (id) {
@@ -96,5 +55,42 @@ function deletemovie (id) {
 			} else {
 				$('.movie[data-movie-id=' + id + ']').remove();
 			}
+	});
+}
+
+function loadMovieChart () {
+	var movie_id = $('.movie').data('movie-id');
+	$.get('/api/movies/' + movie_id + '.json', function(data) {
+		var set = data['moviemark_set'];
+		var users = Array();
+		var marks = Array();
+		for (i = 0; i < set.length; i++) {
+			users.push(set[i]['author']['username']);
+			marks.push(set[i]['value'])
+		}
+		var myChart = Highcharts.chart('movie-chart', {
+			chart: {
+				type: 'bar'
+			},
+			title: {
+				text: 'Статистика оценок'
+			},
+			xAxis: {
+				categories: users
+			},
+			yAxis: {
+				title: {
+					text: null
+				},
+				max: 10
+			},
+			series: [{
+				name: 'Оценка',
+				data: marks
+			}],
+			legend: [{
+				enabled: false
+			}]
+		});
 	});
 }
