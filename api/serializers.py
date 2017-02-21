@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
 from movies.models import Movie, Genre
 from movie_ratings.models import MovieComment, MovieMark
-from rest_framework.serializers import ModelSerializer, HyperlinkedRelatedField, ReadOnlyField
+from rest_framework.serializers import ModelSerializer, ReadOnlyField, FloatField
 
 
 class MovieSerializer(ModelSerializer):
+	rating = FloatField(read_only=True)
+
 	class Meta:
 		model = Movie
 		depth = 2
-		fields = ('id', 'title', 'genre', 'year', 'budget', 'box_office', 'description', 'poster', 'moviemark_set')
+		fields = ('id', 'title', 'rating', 'genre', 'year', 'budget', 'box_office', 'description', 'poster', 'moviecomment_set', 'moviemark_set')
 
 
 class UserSerializer(ModelSerializer):

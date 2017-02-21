@@ -1,13 +1,11 @@
 from django.conf.urls import url
-from movies.views import MovieListView, RatingsView, MovieDetailView, EditMovie, AddMovie, DeleteMovie, RateMovie, MovieMarksView
+from movies.views import MovieListView, MovieDetailView, EditMovie, AddMovie, DeleteMovie, RateMovie
 from movie_ratings.views import CommentDetailView, EditComment, AddComment, DeleteComment, RestoreComment
 from django.contrib.auth.decorators import permission_required
 
 
 urlpatterns = [
     url(r'^$', MovieListView.as_view(), name='movies_list'),
-    url(r'ratings', RatingsView.as_view(), name='ratings'),
-    url(r'marks', MovieMarksView.as_view(), name='marks'),
     url(r'comments/edit/(?P<pk>\d+)', EditComment.as_view(), name="comment-edit"),
     url(r'comments/add', AddComment.as_view(), name="comment-add"),
     url(r'comments/delete', DeleteComment.as_view(), name="comment-delete"),

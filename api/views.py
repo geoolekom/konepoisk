@@ -5,6 +5,7 @@ from api.serializers import MovieSerializer, UserSerializer, CommentSerializer
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
 from rest_framework import permissions
 from api.permissions import IsAuthorOrReadOnly
+from django.db.models import Avg, Count
 
 
 class MovieList(ListCreateAPIView):
@@ -12,10 +13,11 @@ class MovieList(ListCreateAPIView):
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 	def get_queryset(self):
+		queryset = Movie.objects.filter(deleted=False).annotate(rating=Avg('moviemark__value')).annotate(pop=Count('moviemark'))
 		if 'sort' in self.request.GET:
-			return Movie.objects.filter(deleted=False).order_by(self.request.GET['sort'])
+			return queryset.order_by(self.request.GET['sort'])
 		else:
-			return Movie.objects.filter(deleted=False)
+			return queryset
 
 
 class MovieDetail(RetrieveUpdateDestroyAPIView):

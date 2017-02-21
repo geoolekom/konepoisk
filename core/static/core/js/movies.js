@@ -5,11 +5,15 @@ $(document).ready(function() {
 
 		$('.movie-rating').each(function() {
 			movieIds.push($(this).data('movie-id'));
-		})
+		});
 
-		$.getJSON('/movies/ratings', {ids: movieIds.join(',')} , function(data) {
-			for (var i in data) {
-				$('.movie-rating[data-movie-id='+i+']').html('<b>' + data[i] + '</b>');
+		$.getJSON('/api/movies.json', function(data) {
+			for(i = 0; i < data.length; i++) {
+				movie_id = data[i]['id'];
+				index = movieIds.indexOf(movie_id);
+				if (index != -1) {
+					$('.movie-rating[data-movie-id='+movie_id+']').html('<b>' + data[i]['rating'].toFixed(2) + '</b>');
+				}
 			}
 		});
 	}
@@ -61,7 +65,7 @@ $(document).ready(function() {
                 },
                 yAxis: {
                     title: {
-                        text: null,
+                        text: null
                     },
                     max: 10
                 },
@@ -70,8 +74,8 @@ $(document).ready(function() {
                     data: marks
                 }],
                 legend: [{
-                    enabled: false,
-                }],
+                    enabled: false
+                }]
             });
         });
 

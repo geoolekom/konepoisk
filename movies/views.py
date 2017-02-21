@@ -1,7 +1,7 @@
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, RedirectView, DeleteView
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, RedirectView
 from movies.models import Movie
-from movie_ratings.models import MovieMark, MovieComment
-from django.http import JsonResponse, HttpResponse, Http404
+from movie_ratings.models import MovieMark
+from django.http import HttpResponse, Http404
 from django.template.defaulttags import register
 from django.shortcuts import redirect, get_object_or_404
 from movies.forms import MovieForm, RateForm, CommentForm, SortForm
@@ -39,30 +39,6 @@ class MovieListView(ListView):
 		context = super(MovieListView, self).get_context_data(**kwargs)
 		context['sort_form'] = SortForm({'sort': self.sort})
 		return context
-
-
-class RatingsView(View):
-
-	def get(self, request):
-		ids = request.GET.get('ids', '')
-		ids = ids.split(',')
-		if ids[0] == '':
-			movies = dict()
-		else:
-			movies = {movie.id: movie.get_rating() for movie in Movie.objects.filter(id__in=ids)}
-		return JsonResponse(movies)
-
-
-class MovieMarksView(View):
-
-	def get(self, request):
-		movie_id = request.GET.get('id', '')
-		if id != '':
-			markset = get_object_or_404(Movie, pk=movie_id).moviemark_set.all()
-			data = dict()
-			data['users'] = [mark.author.username for mark in markset]
-			data['marks'] = [mark.value for mark in markset]
-		return JsonResponse(data)
 
 
 class MovieDetailView(DetailView):

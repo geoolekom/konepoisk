@@ -21,7 +21,7 @@ $(document).ready(function() {
                 },
                 yAxis: {
                     title: {
-                        text: null,
+                        text: null
                     },
                     max: 10
                 },
@@ -30,8 +30,8 @@ $(document).ready(function() {
                     data: marks
                 }],
                 legend: [{
-                    enabled: false,
-                }],
+                    enabled: false
+                }]
             });
         });
 

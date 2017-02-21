@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model, login
-from django.views.generic import CreateView, RedirectView, DetailView, FormView, View
+from django.views.generic import CreateView, RedirectView, DetailView, FormView
 from core.forms import RegistrationForm, LoginForm
 from movie_ratings.models import MovieMark
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import redirect, reverse, get_object_or_404
 from django.core.signing import Signer, BadSignature
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404
 from django.db.models import Q
 
 signer = Signer()
@@ -74,17 +74,4 @@ class UserInfoView(DetailView):
 	def dispatch(self, request, pk=None, *args, **kwargs):
 		self.marks = MovieMark.objects.filter(Q(author_id=pk) & Q(movie__deleted=False))
 		return super(UserInfoView, self).dispatch(request, *args, **kwargs)
-
-
-class UserMarksView(View):
-
-	def get(self, request):
-		user_id = request.GET.get('id', '')
-		if id != '':
-			markset = MovieMark.objects.filter(author_id=user_id)
-			data = dict()
-			data['movies'] = [mark.movie.title for mark in markset]
-			data['marks'] = [mark.value for mark in markset]
-		return JsonResponse(data)
-
 
