@@ -9,14 +9,6 @@ class Genre(Titled):
 		verbose_name_plural = 'Жанры'
 
 
-class Actor(Titled):
-	age = models.IntegerField(verbose_name='Возраст')
-
-	class Meta:
-		verbose_name = 'Актер'
-		verbose_name_plural = 'Актеры'
-
-
 class Movie(Dated, Deletable, Titled):
 
 	def poster_path(self, filename):
@@ -47,7 +39,3 @@ class Movie(Dated, Deletable, Titled):
 		verbose_name = 'Фильм'
 		verbose_name_plural = 'Фильмы'
 
-
-class ActorMovie(models.Model):
-	actor = models.ForeignKey(Actor)
-	movie = models.ForeignKey(Movie)

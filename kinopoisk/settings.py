@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 	'bootstrap3',
 	'redactor',
 	'debug_toolbar',
+	'rest_framework',
 	'properties.apps.PropertiesConfig',
 	'core.apps.CoreConfig',
 	'movies.apps.MoviesConfig',

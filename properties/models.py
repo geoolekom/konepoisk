@@ -6,7 +6,7 @@ class Authored(models.Model):
 	author = models.ForeignKey(
 		settings.AUTH_USER_MODEL,
 		verbose_name='Автор',
-		related_name='+'
+		#related_name='+'
 	)
 
 	class Meta:
