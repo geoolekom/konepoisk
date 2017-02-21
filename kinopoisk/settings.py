@@ -27,7 +27,7 @@ SECRET_KEY = config.get('main', 'SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [config.get('main', 'HOST')]
 
 # Application definition
 
@@ -131,12 +131,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/geoolekom/track/web/kinopoisk/collected_static/'
-STATICFILES_DIRS = ('/home/geoolekom/track/web/kinopoisk/src/static/',)
+STATIC_ROOT = os.path.join(BASE_DIR, '../collected_static/')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 IMAGE_URL = '/media/'
-IMAGE_ROOT = '/home/geoolekom/track/web/kinopoisk/media/'
+IMAGE_ROOT = os.path.join(BASE_DIR, '../media/')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/geoolekom/track/web/kinopoisk/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')
 
 REDACTOR_OPTIONS = {'lang': 'ru'}
 REDACTOR_UPLOAD = MEDIA_ROOT
@@ -149,4 +149,4 @@ EMAIL_HOST_USER = config.get('smtp', 'USER')
 EMAIL_HOST_PASSWORD = config.get('smtp', 'PASSWORD')
 EMAIL_USE_TLS = True
 
-HOST = 'localhost'
+HOST = config.get('main', 'HOST')
