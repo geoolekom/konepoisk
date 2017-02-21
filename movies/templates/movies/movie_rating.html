@@ -1,8 +1,13 @@
 {% load bootstrap3 %}
 
-<div class="col-xs-2 movie-rating" align="right" data-rate-url="{% url 'movies:rate' movie.id %}">
-    <h2> {{ movie.get_rating }} </h2>
+<div
+        style="font-family: 'Trebuchet MS', monospace;	font-size: 36pt;"
+        class="col-xs-2 movie-rating"
+        align="right"
+        data-rate-url="{% url 'movies:rate' movie.id %}"
+        data-movie-id="{{ movie.id }}">
 </div>
+
 <div class="col-xs-2 rate-form" align="right">
     {% if user.is_authenticated %}
     <form class="form-inline" method="post">

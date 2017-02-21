@@ -28,15 +28,13 @@
 
             {% if forloop.counter|div3 == 1 %} <div class="row"> {% endif %}
                 <div class="col-sm-4">
-                    <div class="post panel panel-default" data-movie-id="" -id="{{movie.id}}">
+                    <div class="post panel panel-default" data-movie-id="{{movie.id}}">
                         <div class="panel-heading blocked">
                             <div class="row">
                                 <div class="col-sm-9">
                                     <b> <a href="{% url 'movies:detail' movie.id %}"> {{ movie.title|title }} </a> </b>
                                 </div>
-                                <div class="col-sm-2 movie-rating" data-movie-id="{{movie.id}}">
-                                    <b> {{ movie.get_rating }} </b>
-                                </div>
+                                <div class="col-sm-2 movie-rating" data-movie-id="{{movie.id}}"></div>
                             </div>
                         </div>
 

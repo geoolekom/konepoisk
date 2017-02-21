@@ -6,7 +6,7 @@ from django.template.defaulttags import register
 from django.shortcuts import redirect, get_object_or_404
 from movies.forms import MovieForm, RateForm, CommentForm, SortForm
 from django.core.urlresolvers import reverse
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, F
 
 
 @register.filter
@@ -30,7 +30,9 @@ class MovieListView(ListView):
 		return super(MovieListView, self).dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
-		return Movie.objects.annotate(rating=Avg('moviemark__value')).filter(deleted=False).order_by(self.sort)
+		return Movie.objects.annotate(rating=Avg('moviemark__value'))\
+			.filter(deleted=False)\
+			.order_by(self.sort)
 
 	def get_context_data(self, **kwargs):
 		context = super(MovieListView, self).get_context_data(**kwargs)
@@ -67,15 +69,20 @@ class MovieDetailView(DetailView):
 	template_name = 'movies/movie.html'
 	object = None
 	model = Movie
+	movie_id = None
 
 	def dispatch(self, request, pk=None, *args, **kwargs):
+		self.movie_id = pk
+		return super(MovieDetailView, self).dispatch(request, *args, **kwargs)
+
+	def get_object(self, queryset=None):
 		try:
-			self.object = Movie.objects.filter(pk=pk)\
+			self.object = Movie.objects.filter(pk=self.movie_id)\
 				.prefetch_related('moviecomment_set__author')\
 				.prefetch_related('moviemark_set').get()
 		except Movie.DoesNotExist:
 			raise Http404('Такого фильма не существует!')
-		return super(MovieDetailView, self).dispatch(request, *args, **kwargs)
+		return self.object
 
 	def get_context_data(self, **kwargs):
 		context = super(MovieDetailView, self).get_context_data(**kwargs)

@@ -19,7 +19,7 @@ $(document).ready(function() {
                     max: 10
                 },
                 series: [{
-                    name: 'Оценки',
+                    name: 'Оценка',
                     data: data['marks']
                 }],
                 legend: [{

@@ -14,6 +14,7 @@ $(document).ready(function() {
 		});
 	}
 
+	updateRating();
 	window.setInterval(updateRating, 1000);
 
 	$('.sort-form').find('select').change(function () {
@@ -31,7 +32,7 @@ $(document).ready(function() {
 			url, 
 			{mark: mark_val, csrfmiddlewaretoken: csrf},
 			function (new_rating) {
-				$(movieRating).html('<h2>' + new_rating + '</h2>');
+				$(movieRating).html('<b>' + new_rating + '</b>');
 				image_src = $('.bar-chart').attr("src");
 				loadMovieChart();
 		});
@@ -57,7 +58,7 @@ $(document).ready(function() {
                     max: 10
                 },
                 series: [{
-                    name: 'Оценки',
+                    name: 'Оценка',
                     data: data['marks']
                 }],
                 legend: [{

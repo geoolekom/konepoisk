@@ -57,14 +57,8 @@
     margin-top: 3px;
 }
 
-.post-title {
+.movie-title {
 	height: 93px;
-}
-
-.post-rating {
-	font-family: "Trebuchet MS", monospace;
-	font-size: 36pt;
-	font-color: green;
 }
 
 .comment-title {
