@@ -19,11 +19,11 @@
 			<div class="panel-body row">
 				{% if movie.poster %}
 				<div class="col-sm-4">
-					<p> <img src="{{ movie.poster.url }}" border=2> </p>
-					<p> <b> Жанр: </b> {{ movie.genre }} </p>
-					<p> <b> Год: </b> {{ movie.year }} </p>
-					<p> <b> Бюджет: </b> {{ movie.budget }} </p>
-					<p> <b> Сборы: </b> {{ movie.box_office }} </p>
+					<p> <img src="{{ movie.poster.url }}" border=4> </p>
+					<p> <b> Жанр: </b> {{ movie.genre | default_if_none:'-----' }} </p>
+					<p> <b> Год: </b> {{ movie.year | default_if_none:'-----'}} </p>
+					<p> <b> Бюджет: </b> {{ movie.budget | default_if_none:'-----'}} </p>
+					<p> <b> Сборы: </b> {{ movie.box_office | default_if_none:'-----'}} </p>
 				</div>
                 {% endif %}
 				<div class="col-sm-8">
