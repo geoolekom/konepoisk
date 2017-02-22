@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{% static 'core/js/highcharts.js' %}"></script>
     <script type="text/javascript" src="{% static 'core/js/main.js' %}"></script>
 
-    <title> {% block title %} {% endblock %} </title>
+    <title> {% block title %} Конепоиск {% endblock %} </title>
     <style>
         .affix + .container {
             padding-top: 71px;
@@ -54,7 +54,6 @@
 
           {% if errors %} <div class="alert alert-danger fade in">
               <strong> {{errors}} </strong>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           </div>
           {% endif %}
 

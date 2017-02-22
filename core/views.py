@@ -1,11 +1,12 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, authenticate
 from django.views.generic import CreateView, RedirectView, DetailView, FormView, View
 from core.forms import RegistrationForm, LoginForm
 from movie_ratings.models import MovieMark
 from django.conf import settings
 from django.core.mail import send_mail
-from django.shortcuts import redirect, reverse, get_object_or_404
+from django.shortcuts import redirect, reverse, get_object_or_404, render
 from django.core.signing import Signer, BadSignature
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse
 from django.db.models import Q
 
@@ -58,17 +59,21 @@ class LoginView(FormView):
 	success_url = '/'
 
 	def form_valid(self, form):
-		try:
-			user = get_user_model().objects.get(email=form.cleaned_data['email'])
-			if user.check_password(form.cleaned_data['password']) and user.is_active:
+		email = form.cleaned_data['email']
+		password = form.cleaned_data['password']
+		data = get_user_model().objects.filter(Q(email=email) & Q(is_active=True))
+		if not data:
+			return render(self.request, template_name='core/base.html', context={'errors': 'Неправильный Email.'})
+		else:
+			user = data.get()
+			if user.check_password(password):
 				login(self.request, user)
 				return super(LoginView, self).form_valid(form)
 			else:
-				form.add_error('password', 'Неправильный пароль.')
-				return self.form_invalid(form)
-		except get_user_model().DoesNotExist:
-			form.add_error('email', 'Нет пользователя с таким email!')
-			return self.form_invalid(form)
+				return render(self.request, template_name='core/base.html', context={'errors': 'Неправильный пароль'})
+
+	def form_invalid(self, form):
+		return render(self.request, template_name='core/base.html', context={'errors': form.errors})
 
 
 class UserInfoView(DetailView):
