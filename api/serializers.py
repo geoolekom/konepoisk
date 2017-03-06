@@ -25,8 +25,8 @@ class MarkSerializer(ModelSerializer):
 
 class MovieSerializer(ModelSerializer):
 	rating = FloatField(read_only=True)
-	moviecomment_set = CommentSerializer(many=True)
-	moviemark_set = MarkSerializer(many=True)
+	moviecomment_set = CommentSerializer(many=True, instance=MovieComment.objects.filter(movie__deleted=False))
+	moviemark_set = MarkSerializer(many=True, instance=MovieMark.objects.filter(movie__deleted=False))
 
 	class Meta:
 		model = Movie
@@ -34,8 +34,8 @@ class MovieSerializer(ModelSerializer):
 
 
 class UserSerializer(ModelSerializer):
-	moviecomment_set = CommentSerializer(many=True)
-	moviemark_set = MarkSerializer(many=True)
+	moviecomment_set = CommentSerializer(many=True, instance=MovieComment.objects.filter(movie__deleted=False))
+	moviemark_set = MarkSerializer(many=True, instance=MovieMark.objects.filter(movie__deleted=False))
 
 	class Meta:
 		model = get_user_model()

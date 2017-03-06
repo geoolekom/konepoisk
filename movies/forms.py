@@ -2,15 +2,17 @@ from django import forms
 from movies.models import Movie
 from movie_ratings.models import MovieComment, MovieMark
 
+sort_choices = dict([
+	("-pub_time", "Новые сверху"),
+	("-rating", "Лучшие сверху"),
+	("title", "По алфавиту"),
+	("-pop", "По популярности"),
+])
+
 
 class SortForm(forms.Form):
 	sort = forms.ChoiceField(
-		choices=[
-			("-pub_time", "Новые сверху"),
-			("-rating", "Лучшие сверху"),
-			("title", "По алфавиту"),
-			("-pop", "По популярности"),
-		],
+		choices=sort_choices.items(),
 		label=''
 	)
 

@@ -19,7 +19,7 @@ $(document).ready(function() {
 	}
 
 	updateRating();
-	window.setInterval(updateRating, 1000);
+	//window.setInterval(updateRating, 1000);
 
 	$('.sort-form').find('select').change(function () {
 	    window.location.href = '/movies?sort=' + $(this).val();

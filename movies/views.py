@@ -4,7 +4,7 @@ from movie_ratings.models import MovieMark
 from django.http import HttpResponse, Http404
 from django.template.defaulttags import register
 from django.shortcuts import redirect, get_object_or_404
-from movies.forms import MovieForm, RateForm, CommentForm, SortForm
+from movies.forms import MovieForm, RateForm, CommentForm, SortForm, sort_choices
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Avg, F, Count
 
@@ -30,10 +30,13 @@ class MovieListView(ListView):
 		return super(MovieListView, self).dispatch(request, *args, **kwargs)
 
 	def get_queryset(self):
-		return Movie.objects\
+		queryset = Movie.objects\
 			.annotate(rating=Avg('moviemark__value')).annotate(pop=Count('moviemark'))\
-			.filter(deleted=False)\
-			.order_by(self.sort)
+			.filter(deleted=False)
+		if self.sort and self.sort in sort_choices:
+			return queryset.order_by(self.sort)
+		else:
+			return queryset
 
 	def get_context_data(self, **kwargs):
 		context = super(MovieListView, self).get_context_data(**kwargs)
@@ -53,6 +56,7 @@ class MovieDetailView(DetailView):
 		return super(MovieDetailView, self).dispatch(request, *args, **kwargs)
 
 	def get_object(self, queryset=None):
+		get_object_or_404()
 		try:
 			self.object = Movie.objects.filter(pk=self.movie_id)\
 				.prefetch_related('moviecomment_set__author')\
