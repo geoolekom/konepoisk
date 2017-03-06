@@ -124,24 +124,21 @@ class EditMovie(UpdateView):
 		context['editing_title'] = self.object.title
 		return context
 
-	def form_valid(self, form):
-		form.save()
-		return redirect(reverse('movies:detail', kwargs={'pk': self.object.id}))
+	def get_success_url(self):
+		return reverse('movies:detail', kwargs={'pk': self.object.id})
 
 
 class RateMovie(UpdateView):
 
 	def post(self, request, pk=None, *args, **kwargs):
 		if 'mark' in request.POST:
-			try:
-				mark = int(request.POST['mark'])
-				if 0 < mark <= 10:
-					MovieMark.objects.update_or_create(
-						author_id=request.user.id,
-						movie_id=pk,
-						defaults={'value': mark}
-					)
-					return HttpResponse(Movie.objects.get(pk=pk).get_rating())
-			except:
-				raise Http404
-
+			mark = request.POST['mark']
+			if mark.isdigit() and 0 < int(mark) <= 10:
+				MovieMark.objects.update_or_create(
+					author_id=request.user.id,
+					movie_id=pk,
+					defaults={
+						'value': mark
+					}
+				)
+				return HttpResponse(get_object_or_404(Movie, pk=pk).get_rating())
